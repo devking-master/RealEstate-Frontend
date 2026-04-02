@@ -32,6 +32,16 @@ export const useTransactions = () => {
     }
   };
 
+  const updateTransaction = async (id, data) => {
+    try {
+      const response = await privateApiClient.put(`/transactions/${id}`, data);
+      return response.data.data;
+    } catch (err) {
+      console.error(`Error updating transaction ${id}:`, err.response?.data || err.message);
+      throw err;
+    }
+  };
+
   const updateTransactionStatus = async (id, status) => {
     try {
       const response = await privateApiClient.patch(`/transactions/${id}/status`, { status });
@@ -42,7 +52,7 @@ export const useTransactions = () => {
     }
   };
 
-  return { getTransactions, getTransaction, createTransaction, updateTransactionStatus };
+  return { getTransactions, getTransaction, createTransaction, updateTransaction, updateTransactionStatus };
 };
 
 export const useInvoices = () => {

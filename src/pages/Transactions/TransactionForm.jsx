@@ -115,22 +115,26 @@ const TransactionForm = ({ onClose }) => {
 
       {/* Property Selection */}
       <div className="form-group">
-        <label className="block text-sm font-bold mb-1">Property</label>
-        <select 
-          required 
-          name="property" 
-          className="form-control w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
-          value={formData.property} 
-          onChange={handleChange}
-        >
-          <option value="">-- Select Property --</option>
-          {properties.map(p => (
-            <option key={p._id || p.id} value={p._id || p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-      </div>
+  <label className="block text-sm font-bold mb-1">Property</label>
+  <select 
+    required 
+    name="property" 
+    className="form-control w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
+    value={formData.property} 
+    onChange={handleChange}
+  >
+    <option value="">-- Select Property --</option>
+    {/* FIX: Filter to only show 'available' properties */}
+    {properties
+      .filter(p => p.status === 'available')
+      .map(p => (
+        <option key={p._id || p.id} value={p._id || p.id}>
+          {p.name}
+        </option>
+      ))
+    }
+  </select>
+</div>
 
       <div className="grid grid-cols-2 gap-4">
         {/* Total Amount */}

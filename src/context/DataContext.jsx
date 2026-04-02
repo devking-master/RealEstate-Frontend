@@ -126,15 +126,15 @@ export const DataProvider = ({ children }) => {
   };
 
   const actions = {
-    addProperty: async (prop) => { await createProperty(prop); refreshData(); },
-    updateProperty: async (id, updates) => { await updateProperty(id, updates); refreshData(); },
-    deleteProperty: async (id) => { await deleteProperty(id); refreshData(); },
-    updatePropertyStatus: async (id, status) => { await updatePropertyStatus(id, status); refreshData(); },
-    addPropertyImages: async (id, images) => { await addPropertyImages(id, images); refreshData(); },
-    removePropertyImage: async (id, image) => { await removePropertyImage(id, image); refreshData(); },
-    addClient: async (client) => { await createClient(client); refreshData(); },
-    updateClient: async (id, updates) => { await updateClient(id, updates); refreshData(); },
-    deleteClient: async (id) => { await deleteClient(id); refreshData(); },
+    addProperty: async (prop) => { await createProperty(prop); await refreshData(); },
+    updateProperty: async (id, updates) => { await updateProperty(id, updates); await refreshData(); },
+    deleteProperty: async (id) => { await deleteProperty(id); await refreshData(); },
+    updatePropertyStatus: async (id, status) => { await updatePropertyStatus(id, status); await refreshData(); },
+    addPropertyImages: async (id, images) => { await addPropertyImages(id, images); await refreshData(); },
+    removePropertyImage: async (id, image) => { await removePropertyImage(id, image); await refreshData(); },
+    addClient: async (client) => { await createClient(client); await refreshData(); },
+    updateClient: async (id, updates) => { await updateClient(id, updates); await refreshData(); },
+    deleteClient: async (id) => { await deleteClient(id); await refreshData(); },
     addTransaction: async (txn) => { 
       try {
         await createTransaction(txn); 
@@ -143,7 +143,7 @@ export const DataProvider = ({ children }) => {
         throw err; 
       }
     },
-    updateTransactionStatus: async (id, status) => { await updateTransactionStatus(id, status); refreshData(); },
+    updateTransactionStatus: async (id, status) => { await updateTransactionStatus(id, status); await refreshData(); },
     addInvoice: async (invoice) => {
       const res = await createInvoice(invoice);
       const actualData = res.data?.data || res.data || res;
@@ -166,12 +166,12 @@ export const DataProvider = ({ children }) => {
         throw err;
       }
     },
-    generateReceiptByPayment: async (paymentId) => { await generateReceiptFromPayment(paymentId); refreshData(); },
-    recordPayment: async (payment) => { await recordPayment(payment); refreshData(); },
-    addReceipt: async (receipt) => { await createReceipt(receipt); refreshData(); },
-    addDocument: async (doc) => { await addDocument(doc); refreshData(); },
-    deleteDocument: async (id) => { await deleteDocument(id); refreshData(); },
-    updateSettings: async (settings) => { await updateSettings(settings); refreshData(); },
+    generateReceiptByPayment: async (paymentId) => { await generateReceiptFromPayment(paymentId); await refreshData(); },
+    recordPayment: async (payment) => { await recordPayment(payment); await refreshData(); },
+    addReceipt: async (receipt) => { await createReceipt(receipt); await refreshData(); },
+    addDocument: async (doc) => { await addDocument(doc); await refreshData(); },
+    deleteDocument: async (id) => { await deleteDocument(id); await refreshData(); },
+    updateSettings: async (settings) => { await updateSettings(settings); await refreshData(); },
     downloadInvoice, downloadReceipt
   };
 
