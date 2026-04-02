@@ -1,0 +1,287 @@
+/* ─── Property Card ─────────────────────────── */
+.prop-card {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prop-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .prop-card:hover {
+    box-shadow: 0 0 0 1px var(--zinc-800), 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ─── Card Image Slot ────────────────────────── */
+.prop-card-img {
+  height: 200px;
+  background: var(--bg-hover);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border-main);
+  overflow: hidden;
+}
+
+.prop-img-count {
+  position: absolute;
+  bottom: 0.625rem;
+  left: 0.625rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  backdrop-filter: blur(4px);
+}
+
+.prop-status-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(2px);
+}
+
+/* ─── Table Thumbnail ────────────────────────── */
+.prop-table-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ─── Action Wrapper & Button ────────────────── */
+.prop-action-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.prop-action-btn {
+  flex-shrink: 0;
+}
+
+/* ─── Dropdown Menu ──────────────────────────── */
+.prop-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 14px;
+  padding: 0.375rem;
+  min-width: 190px;
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.22), 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+  animation: dropdownEntrance 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes dropdownEntrance {
+  from { opacity: 0; transform: scale(0.95) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.prop-dropdown-header {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 0.4rem 0.75rem 0.35rem;
+}
+
+.prop-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.8375rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+  position: relative;
+}
+
+.prop-dropdown-item:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.prop-dropdown-item.active {
+  background: var(--bg-hover);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.prop-dropdown-item.danger {
+  color: #ef4444;
+}
+
+.prop-dropdown-item.danger:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.prop-dropdown-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.prop-dropdown-current {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--border-main);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.prop-dropdown-divider {
+  height: 1px;
+  background: var(--border-main);
+  margin: 0.35rem 0;
+}
+
+/* ─── View Toggle ─────────────────────────────── */
+.view-toggle {
+  display: flex;
+  border: 1px solid var(--border-main);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-hover);
+}
+
+.view-toggle-btn {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.view-toggle-btn.active {
+  background: var(--bg-card);
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.view-toggle-btn:hover:not(.active) {
+  color: var(--text-main);
+}
+
+/* ─── Image Upload Zone ───────────────────────── */
+.img-upload-zone {
+  border: 2px dashed var(--border-main);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-hover);
+}
+
+.img-upload-zone:hover {
+  border-color: var(--brand-accent);
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.img-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--text-muted);
+  font-size: 0.8375rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* ─── Image Preview Strip ─────────────────────── */
+.img-preview-strip {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.img-preview-item {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-main);
+  background: var(--bg-hover);
+  flex-shrink: 0;
+}
+
+.img-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-remove-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-size: 0;
+  line-height: 1;
+  padding: 0;
+}
+
+.img-remove-btn:hover {
+  background: #ef4444;
+}
+
+/* ─── Spinner Animation ───────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
