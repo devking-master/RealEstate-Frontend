@@ -11,6 +11,7 @@ const TransactionForm = ({ onClose }) => {
     type: 'sale',
     totalAmount: '',
     paidAmount: '',
+    paymentMethod: 'bank_transfer', // ADDED: Default value
     paymentStructure: 'full',
     status: 'pending',
     notes: ''
@@ -115,26 +116,26 @@ const TransactionForm = ({ onClose }) => {
 
       {/* Property Selection */}
       <div className="form-group">
-  <label className="block text-sm font-bold mb-1">Property</label>
-  <select 
-    required 
-    name="property" 
-    className="form-control w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
-    value={formData.property} 
-    onChange={handleChange}
-  >
-    <option value="">-- Select Property --</option>
-    {/* FIX: Filter to only show 'available' properties */}
-    {properties
-      .filter(p => p.status === 'available')
-      .map(p => (
-        <option key={p._id || p.id} value={p._id || p.id}>
-          {p.name}
-        </option>
-      ))
-    }
-  </select>
-</div>
+        <label className="block text-sm font-bold mb-1">Property</label>
+        <select 
+          required 
+          name="property" 
+          className="form-control w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
+          value={formData.property} 
+          onChange={handleChange}
+        >
+          <option value="">-- Select Property --</option>
+          {/* FIX: Filter to only show 'available' properties */}
+          {properties
+            .filter(p => p.status === 'available')
+            .map(p => (
+              <option key={p._id || p.id} value={p._id || p.id}>
+                {p.name}
+              </option>
+            ))
+          }
+        </select>
+      </div>
 
       <div className="grid grid-cols-2 gap-4">
         {/* Total Amount */}
@@ -165,13 +166,32 @@ const TransactionForm = ({ onClose }) => {
         </div>
       </div>
 
-      {/* Status Badge */}
-      <div className="mt-2">
-        <div className={`inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
-          formData.status === 'completed' ? 'bg-green-100 text-green-700' : 
-          formData.status === 'partially_paid' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-        }`}>
-          Status: {formData.status.replace('_', ' ')}
+      <div className="grid grid-cols-2 gap-4 items-end">
+        {/* Status Badge */}
+        <div className="mt-2">
+          <label className="block text-xs text-gray-500 font-bold uppercase mb-1">Calculated Status</label>
+          <div className={`inline-block px-3 py-2 rounded border text-xs font-black uppercase tracking-wider ${
+            formData.status === 'completed' ? 'bg-green-50 text-green-700 border-green-200' : 
+            formData.status === 'partially_paid' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-50 text-gray-700 border-gray-200'
+          }`}>
+            {formData.status.replace('_', ' ')}
+          </div>
+        </div>
+
+        {/* ADDED: Payment Method Selection */}
+        <div className="form-group">
+          <label className="block text-sm font-bold mb-1">Payment Method</label>
+          <select 
+            name="paymentMethod" 
+            className="form-control w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
+            value={formData.paymentMethod} 
+            onChange={handleChange}
+          >
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="cash">Cash</option>
+            <option value="check">Check</option>
+            <option value="credit_card">Credit Card</option>
+          </select>
         </div>
       </div>
 
