@@ -374,19 +374,16 @@ h1, h2, h3, h4 {
 
 /* Catalyst Modals - The Professional Pop-up */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(9, 9, 11, 0.7); /* Slightly lighter for better contrast with blur */
-    backdrop-filter: blur(12px); /* Stronger blur for "cooler" look */
+    position: fixed; 
+    inset: 0;        
+    background-color: rgba(9, 9, 11, 0.8); 
+    backdrop-filter: blur(8px); 
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 2rem;
-    animation: fadeIn 0.4s ease-out;
+    justify-content: center; /* Keeps it centered horizontally */
+    align-items: flex-start; /* <--- This moves it to the TOP */
+    z-index: 9999;           
+    padding: 40px 2rem;      /* 40px padding at the top so it breathes */
+    overflow-y: auto;        /* Allows the whole overlay to scroll if needed */
 }
 
 @keyframes fadeIn {
@@ -401,9 +398,22 @@ h1, h2, h3, h4 {
     border-radius: var(--radius-xl);
     border: 1px solid var(--border-main);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    animation: modalEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* We remove max-height: 90vh so the form can expand naturally at the top */
+    margin-bottom: 40px;     /* Space at the bottom after scrolling */
+    animation: modalSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modalSlideDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
 @keyframes modalEntrance {

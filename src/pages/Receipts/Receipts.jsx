@@ -23,8 +23,14 @@ const Receipts = () => {
   };
 
   const getPropertyTitle = (receipt) => {
-    return receipt.propertyId?.title || receipt.propertyId?.name || "General Asset";
-  };
+  // Check transaction first, then propertyId object fields
+  return (
+    receipt.propertyId?.title || 
+    receipt.propertyId?.name || 
+    receipt.transactionId?.property?.name || 
+    "General Asset"
+  );
+};
 
   const filteredReceipts = receipts.filter(r => {
     const clientName = getClientName(r);

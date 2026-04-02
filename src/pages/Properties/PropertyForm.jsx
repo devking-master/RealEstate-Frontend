@@ -8,7 +8,6 @@ const PropertyForm = ({ onClose, existingProperty }) => {
   const { uploadFile, uploading } = useUpload();
   const isEditing = !!existingProperty;
 
-  // --- FIX: Unpack JSON data for editing ---
   let initialExtra = {};
   try {
     if (existingProperty?.description && existingProperty.description.startsWith('{')) {
@@ -30,7 +29,7 @@ const PropertyForm = ({ onClose, existingProperty }) => {
   });
 
   const [images, setImages] = useState(
-    (existingProperty?.images || []).map(url => ({ url, name: 'Photo', isExisting: true }))
+    (existingProperty?.images || []).map(url => ({ url, isExisting: true }))
   );
   const [submitting, setSubmitting] = useState(false);
   const fileRef = useRef(null);
@@ -40,34 +39,44 @@ const PropertyForm = ({ onClose, existingProperty }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleImageSelect = async (e) => {
-    const files = Array.from(e.target.files);
-    for (const file of files) {
-      try {
-        const result = await uploadFile(file);
-        setImages(prev => [...prev, { url: result.url, name: file.name, isExisting: false }]);
-      } catch (err) {
-        console.error('Upload failed:', err);
-      }
-    }
-    e.target.value = '';
-  };
+ const handleImageSelect = async (e) => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
 
-  const removeImage = (url) => setImages(prev => prev.filter(img => img.url !== url));
+  for (const file of files) {
+    try {
+      const filePath = await uploadFile(file); // This now returns "uploads/filename.jpg"
+      
+      if (filePath) {
+        // We add it to our list. 
+        // The URL is just the path from the server
+        setImages(prev => [...prev, { url: filePath, isExisting: false }]);
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+    }
+  }
+  if (fileRef.current) fileRef.current.value = '';
+};
+
+  const removeImage = (urlToRemove) => {
+    setImages(prev => prev.filter(img => img.url !== urlToRemove));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
+      const imageUrls = images.map(img => img.url);
       const payload = {
         propertyId: existingProperty?.propertyId || `PROP-${Date.now()}`,
         name: formData.title,
         type: formData.type === 'residential' ? 'house' : formData.type,
         price: Number(formData.price),
         status: formData.status,
-        imageUrl: images[0]?.url || '',
-        // Store all UI-specific fields in the description string
+        imageUrl: imageUrls[0] || '',
+        images: imageUrls, 
         description: JSON.stringify({
           text: formData.description,
           location: formData.location,
@@ -93,18 +102,78 @@ const PropertyForm = ({ onClose, existingProperty }) => {
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div className="form-group">
         <label className="form-label">Property Images</label>
-        <div className="img-upload-zone" onClick={() => fileRef.current?.click()} style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center', cursor: 'pointer' }}>
-          {uploading ? <Loader2 className="spin" /> : <span>Click to add photos</span>}
+        <div 
+          className="img-upload-zone" 
+          onClick={() => fileRef.current?.click()} 
+          style={{ border: '2px dashed var(--border-main)', padding: '30px', textAlign: 'center', cursor: 'pointer', borderRadius: '12px', background: 'var(--bg-subtle)' }}
+        >
+          {uploading ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+              <Loader2 className="spin" size={20} /> <span>Uploading...</span>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <ImagePlus size={24} color="var(--brand-accent)" />
+              <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Click to add photos</span>
+            </div>
+          )}
         </div>
         <input ref={fileRef} type="file" multiple style={{ display: 'none' }} onChange={handleImageSelect} />
-        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-          {images.map(img => (
-            <div key={img.url} style={{ position: 'relative' }}>
-              <img src={img.url} alt="preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
-              <button type="button" onClick={() => removeImage(img.url)} style={{ position: 'absolute', top: -5, right: -5, background: 'red', color: 'white', borderRadius: '50%', border: 'none', width: '18px', height: '18px', fontSize: '10px' }}>X</button>
-            </div>
-          ))}
-        </div>
+        
+        <div style={{ 
+  display: 'grid', 
+  gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', 
+  gap: '12px', 
+  marginTop: '15px' 
+}}>
+  {images.map((img, idx) => {
+    if (!img?.url) return null;
+    
+    // Construct the full URL for the <img> tag
+    const fullUrl = img.url.startsWith('http') 
+      ? img.url 
+      : `http://localhost:5000/${img.url}`;
+    
+    return (
+      <div key={idx} className="image-preview-wrapper" style={{ 
+        position: 'relative', 
+        aspectRatio: '1/1',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        border: '2px solid var(--border-subtle)',
+        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'
+      }}>
+        <img 
+          src={fullUrl} 
+          alt="preview" 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        />
+        <button 
+          type="button" 
+          onClick={() => removeImage(img.url)} 
+          style={{ 
+            position: 'absolute', 
+            top: '4px', 
+            right: '4px', 
+            background: 'rgba(239, 68, 68, 0.9)', 
+            color: 'white', 
+            borderRadius: '50%', 
+            border: 'none', 
+            width: '20px', 
+            height: '20px', 
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(4px)'
+          }}
+        >
+          <X size={12} strokeWidth={3} />
+        </button>
+      </div>
+    );
+  })}
+</div>
       </div>
 
       <div className="form-group">
@@ -158,7 +227,7 @@ const PropertyForm = ({ onClose, existingProperty }) => {
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
         <button type="button" className="btn btn-outline" onClick={onClose}>Cancel</button>
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
+        <button type="submit" className="btn btn-primary" disabled={submitting || uploading}>
           {submitting ? 'Saving...' : 'Save Asset'}
         </button>
       </div>

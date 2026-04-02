@@ -54,9 +54,11 @@ const Transactions = () => {
     if (!propData) return 'General Asset';
     if (typeof propData === 'string') {
       const property = properties.find(p => (p._id || p.id) === propData);
-      return property?.name || 'External Asset';
+      // ADD .title || .name HERE
+      return property?.title || property?.name || 'External Asset';
     }
-    return propData.name || 'External Asset';
+    // ADD .title || .name HERE
+    return propData.title || propData.name || 'External Asset';
   };
 
   const getInvoiceForTransaction = (transactionId) => {
@@ -121,16 +123,22 @@ const Transactions = () => {
     return sortedTransactions.slice(startIdx, startIdx + itemsPerPage);
   }, [sortedTransactions, currentPage]);
 
-  const handleGenerateInvoice = async (dbId) => {
-    setIsLoading(true);
-    try {
-      const response = await privateApiClient.post('/invoices/generate-from-transaction', { 
-        transactionId: dbId 
-      });
-      if (response.data.success) {
-        alert('Invoice generated successfully!');
-        await refreshData(); 
-      } else {
+const handleGenerateInvoice = async (dbId) => {
+  setIsLoading(true);
+  try {
+    // Find the actual transaction object to get the clean property ID
+    const txn = transactions.find(t => (t._id || t.id) === dbId);
+    const propertyId = txn.property?._id || txn.property;
+
+    const response = await privateApiClient.post('/invoices/generate-from-transaction', { 
+      transactionId: dbId,
+      propertyId: propertyId // Pass this explicitly to be safe
+    });
+    
+    if (response.data.success) {
+      alert('Invoice generated successfully!');
+      await refreshData(); 
+    } else {
         alert(response.data.message || 'Failed to generate invoice');
       }
     } catch (error) {

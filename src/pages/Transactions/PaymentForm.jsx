@@ -11,7 +11,6 @@ const PaymentForm = ({ transactionId, onClose }) => {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 1. Get transaction details to show remaining balance
   const currentTransaction = useMemo(() => {
     return transactions.find(t => (t._id || t.id) === transactionId);
   }, [transactions, transactionId]);
@@ -33,81 +32,94 @@ const PaymentForm = ({ transactionId, onClose }) => {
     try {
       if (!currentTransaction) throw new Error("Transaction details not found.");
       
-      if (Number(formData.amount) <= 0) {
-        throw new Error("Please enter a valid payment amount.");
-      }
-
-      // 2. Automatically find the invoice linked to this transaction
       const linkedInvoice = invoices.find(inv => {
         const invTxnId = inv.transactionId?._id || inv.transactionId;
         return invTxnId === transactionId;
       });
 
-      if (!linkedInvoice) {
-        throw new Error("No invoice found for this transaction. Please generate an invoice first.");
-      }
+      if (!linkedInvoice) throw new Error("No invoice found for this transaction.");
 
-      // 3. Prepare payload for the backend
       const paymentData = {
-        amount: Number(formData.amount), // Matches 'amount' in controller
-        method: formData.method,
+        amount: Number(formData.amount),
+        paymentMethod: formData.method,
+        propertyId: currentTransaction.property?._id || currentTransaction.property,
         date: formData.date
       };
 
-      // 4. Execute payment
       await makeInvoicePayment(linkedInvoice._id, paymentData);
-
-      alert('Payment recorded! Transaction and Invoice have been updated.');
       onClose(); 
     } catch (err) {
-      const errorMessage = err.response?.data?.error || err.message || 'Error recording payment';
-      setError(errorMessage);
+      setError(err.response?.data?.error || err.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-2">
+    <form onSubmit={handleSubmit} className="animate-fade-in-up">
       {error && (
-        <div className="p-3 bg-red-100 text-red-700 rounded-md text-sm font-bold border border-red-200">
+        <div className="badge badge-danger" style={{ width: '100%', marginBottom: '1rem', padding: '0.75rem' }}>
           {error}
         </div>
       )}
 
       {currentTransaction && (
-        <div className="p-4 bg-blue-50 rounded-md border border-blue-200">
-          <p className="text-xs text-blue-700 font-bold uppercase tracking-wider">Outstanding Balance</p>
-          <p className="text-2xl font-black text-blue-900">
+        /* UPDATED: High Contrast Balance Box */
+        <div style={{ 
+          padding: '1.5rem', 
+          marginBottom: '2rem', 
+          background: 'var(--zinc-900)', // Dark background
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--zinc-800)',
+          color: '#ffffff' // Pure white text
+        }}>
+          <p style={{ 
+            fontSize: '0.7rem', 
+            fontWeight: 800, 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.1em', 
+            color: 'var(--zinc-400)', // Muted label color
+            marginBottom: '0.5rem'
+          }}>
+            Outstanding Balance
+          </p>
+          <p style={{ 
+            fontSize: '2rem', 
+            fontWeight: 900, 
+            letterSpacing: '-0.05em',
+            color: '#ffffff' // The amount is now bright white
+          }}>
             ₦{remainingBalance.toLocaleString()}
           </p>
-          <p className="text-xs text-blue-600 mt-1">Transaction ID: {transactionId.slice(-8).toUpperCase()}</p>
+          <p style={{ 
+            fontSize: '0.8rem', 
+            marginTop: '0.5rem', 
+            color: 'var(--zinc-400)',
+            fontWeight: 500
+          }}>
+            Property: {currentTransaction.property?.title || currentTransaction.property?.name || 'Asset'}
+          </p>
         </div>
       )}
       
       <div className="form-group">
-        <label className="block text-sm font-bold mb-1">Payment Amount (₦)</label>
+        <label className="form-label">Payment Amount (₦)</label>
         <input 
           required 
           type="number" 
           name="amount" 
-          className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
+          className="form-control" 
           value={formData.amount} 
           onChange={handleChange} 
           placeholder="0.00" 
-          max={remainingBalance > 0 ? remainingBalance : undefined}
+          max={remainingBalance}
           min="1" 
         />
       </div>
 
       <div className="form-group">
-        <label className="block text-sm font-bold mb-1">Payment Method</label>
-        <select 
-          name="method" 
-          className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
-          value={formData.method} 
-          onChange={handleChange}
-        >
+        <label className="form-label">Payment Method</label>
+        <select name="method" className="form-control" value={formData.method} onChange={handleChange}>
           <option value="bank_transfer">Bank Transfer</option>
           <option value="cash">Cash</option>
           <option value="cheque">Cheque</option>
@@ -116,31 +128,15 @@ const PaymentForm = ({ transactionId, onClose }) => {
       </div>
 
       <div className="form-group">
-        <label className="block text-sm font-bold mb-1">Payment Date</label>
-        <input 
-          required 
-          type="date" 
-          name="date" 
-          className="w-full border rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
-          value={formData.date} 
-          onChange={handleChange} 
-        />
+        <label className="form-label">Payment Date</label>
+        <input required type="date" name="date" className="form-control" value={formData.date} onChange={handleChange} />
       </div>
 
-      <div className="flex justify-end gap-3 mt-4 pt-4 border-t">
-        <button 
-          type="button" 
-          className="px-4 py-2 text-gray-600 font-bold hover:bg-gray-100 rounded-md transition-colors" 
-          onClick={onClose} 
-          disabled={isSubmitting}
-        >
+      <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-main">
+        <button type="button" className="btn btn-outline" onClick={onClose} disabled={isSubmitting}>
           Cancel
         </button>
-        <button 
-          type="submit" 
-          className="px-6 py-2 bg-blue-600 text-white rounded-md font-bold hover:bg-blue-700 disabled:opacity-50 transition-colors" 
-          disabled={isSubmitting}
-        >
+        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
           {isSubmitting ? 'Processing...' : 'Confirm Payment'}
         </button>
       </div>

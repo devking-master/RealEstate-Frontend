@@ -13,15 +13,14 @@ export const useUpload = () => {
       formData.append('document', file);
       
       const response = await privateApiClient.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
-      return response.data.data;
+
+      // BACKEND SENDS: { data: { fileUrl: "uploads/..." } }
+      // So we return the fileUrl specifically
+      return response.data.data.fileUrl; 
     } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Upload failed';
-      console.error('Error uploading file:', errorMessage);
-      setUploadError(errorMessage);
+      setUploadError('Upload failed');
       throw err;
     } finally {
       setUploading(false);

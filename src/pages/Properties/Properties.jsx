@@ -9,14 +9,12 @@ import {
   Building2,
   Plus,
   TrendingUp,
-  Filter,
   Search,
   CheckCircle2,
   Clock,
   Ban,
   Edit2,
   Trash2,
-  Image as ImageIcon,
 } from 'lucide-react';
 
 const STATUS_CONFIG = {
@@ -163,8 +161,10 @@ const Properties = () => {
   const CardView = () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
       {filtered.map((prop, i) => {
-        const firstImage = prop.images?.[0];
+        const firstImage = prop.images?.[0] || prop.imageUrl;
         const cfg = STATUS_CONFIG[prop.status] || STATUS_CONFIG.available;
+        const fullImgUrl = firstImage ? (firstImage.startsWith('http') ? firstImage : `http://localhost:5000/${firstImage}`) : null;
+        
         return (
           <div
             className="card prop-card animate-stagger"
@@ -178,9 +178,13 @@ const Properties = () => {
               borderRadius: 'var(--radius-xl)',
             }}
           >
-            <div className="prop-card-img" style={{ height: '200px', background: '#f0f0f0', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {firstImage
-                ? <img src={firstImage} alt={prop.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div className="prop-card-img" style={{ height: '200px', background: 'var(--bg-subtle)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {fullImgUrl
+                ? <img 
+                    src={fullImgUrl} 
+                    alt={prop.title} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
                 : <Building2 size={52} color="var(--border-main)" strokeWidth={1} />
               }
               <div style={{ position: 'absolute', top: '0.875rem', right: '0.875rem' }}>
