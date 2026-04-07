@@ -128,64 +128,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 420px', gap: '2rem' }}>
-        <div className="card" style={{ minHeight: '480px', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
-            <div>
-                <h3 style={{ fontSize: '1.125rem' }}>Revenue Projections</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Real-time growth tracking and fiscal forecasting.</p>
-            </div>
-          </div>
-          <div style={{ flex: 1, minHeight: '320px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(226, 232, 240, 0.1)" />
-                <XAxis 
-                  dataKey="name" 
-                  fontSize={12} 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8'}} 
-                  dy={10} 
-                />
-                <YAxis 
-                  fontSize={12} 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8'}} 
-                  tickFormatter={(value) => `₦${value >= 1000 ? (value/1000) + 'k' : value}`}
-                />
-                <Tooltip 
-                    cursor={{ stroke: '#3b82f6', strokeWidth: 1 }}
-                    contentStyle={{ 
-                      background: '#0f172a', 
-                      border: '1px solid rgba(255,255,255,0.1)', 
-                      borderRadius: '12px', 
-                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)',
-                      color: '#fff' 
-                    }}
-                    formatter={(value) => [formatCurrency(value), 'Revenue']}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  stroke="#3b82f6" 
-                  strokeWidth={3} 
-                  fillOpacity={1} 
-                  fill="url(#colorRev)" 
-                  animationDuration={1500}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
+      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
         {/* Recent Ledger Section */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>

@@ -301,4 +301,98 @@
   margin-left: var(--sidebar-collapsed);
   flex: 1;
   min-width: 0;
+  transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Mobile Navigation Architecture --- */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--bg-sidebar);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-main);
+    z-index: 999;
+    padding: 0 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.menu-toggle:active {
+    background: var(--bg-hover);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1001;
+    animation: fadeIn 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px !important; /* Fixed width on mobile */
+        z-index: 1002;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: none;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .sidebar.open .nav-label, 
+    .sidebar.open .sidebar-brand {
+        opacity: 1;
+    }
+
+    .sidebar-overlay.visible {
+        display: block;
+    }
+
+    .main-wrapper {
+        margin-left: 0;
+        padding-top: 60px; /* Space for mobile header */
+    }
+
+    .sidebar:hover {
+        width: 280px !important;
+        backdrop-filter: none;
+        background-color: var(--bg-sidebar);
+    }
+
+    .sidebar:hover ~ .main-wrapper {
+        filter: none;
+    }
 }

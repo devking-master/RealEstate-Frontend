@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useData } from '../../hooks/useData';
+import { alert as swalAlert } from '../../utils/swal';
 
 const TransactionForm = ({ onClose }) => {
   const { properties = [], clients = [], addTransaction, loading } = useData();
@@ -42,7 +43,10 @@ const TransactionForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.client || !formData.property) return alert("Please select client and property.");
+    if (!formData.client || !formData.property) {
+      swalAlert("Missing Selection", "Please select client and property.", "warning");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -54,7 +58,7 @@ const TransactionForm = ({ onClose }) => {
       });
       onClose();
     } catch (err) {
-      alert("Error: " + err.message);
+      swalAlert("Operation Failed", err.message, "error");
     } finally {
       setIsSubmitting(false);
     }

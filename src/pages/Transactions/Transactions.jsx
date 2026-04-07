@@ -8,6 +8,7 @@ import Modal from '../../components/UI/Modal.jsx'; // Changed UI to ui
 import { HoverBorderGradient } from '../../components/UI/hover-border-gradient.jsx'; // Added .jsx
 import { GooeyInput } from '../../components/UI/gooey-input.jsx'; // Added .jsx
 import { LoadingSpinner } from '../../components/UI/loader.jsx'; // Added .jsx
+import { toast, alert as swalAlert } from '../../utils/swal';
 import {
   DollarSign,
   Plus,
@@ -137,13 +138,13 @@ const handleGenerateInvoice = async (dbId) => {
     });
     
     if (response.data.success) {
-      alert('Invoice generated successfully!');
+      toast('Invoice generated successfully!', 'success');
       await refreshData(); 
     } else {
-        alert(response.data.message || 'Failed to generate invoice');
+        swalAlert('Failed', response.data.message || 'Failed to generate invoice', 'error');
       }
     } catch (error) {
-      alert(error.response?.data?.message || 'Error generating invoice');
+      swalAlert('Error', error.response?.data?.message || 'Error generating invoice', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -153,7 +154,7 @@ const handleGenerateInvoice = async (dbId) => {
   const handleRecordPayment = (dbId) => {
     const linkedInvoice = getInvoiceForTransaction(dbId);
     if (!linkedInvoice) {
-      alert("Please generate an invoice first to record a payment.");
+      swalAlert("Attention", "Please generate an invoice first to record a payment.", "warning");
       return;
     }
     setSelectedTransactionId(dbId); 
@@ -213,13 +214,12 @@ const handleGenerateInvoice = async (dbId) => {
 
       <div className="card">
         {/* Filter and Search */}
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-main)', display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-            <div className="flex gap-2">
+        <div className="filter-search-container" style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-main)' }}>
+            <div className="status-filter-group">
                 {['All', 'completed', 'pending', 'partially_paid'].map(f => (
                     <button 
                         key={f}
-                        className={`btn btn-sm ${filter === f ? 'btn-primary' : 'btn-outline'}`}
-                        style={{ borderRadius: '20px', textTransform: 'capitalize' }}
+                        className={`btn filter-btn ${filter === f ? 'btn-primary' : 'btn-outline'}`}
                         onClick={() => { setFilter(f); setCurrentPage(1); }}
                     >
                         {f.replace('_', ' ')}

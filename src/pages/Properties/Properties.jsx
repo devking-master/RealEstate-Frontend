@@ -4,6 +4,7 @@ import { useData } from '../../hooks/useData';
 import { baseURL } from '../../api/client';
 import PropertyForm from './PropertyForm';
 import Modal from '../../components/UI/Modal';
+import { confirm as swalConfirm, alert as swalAlert } from '../../utils/swal';
 import {
   MapPin,
   MoreHorizontal,
@@ -97,19 +98,21 @@ const Properties = () => {
     try {
       await updatePropertyStatus(id, newStatus);
     } catch (err) {
-      console.error('Status update failed:', err);
+      swalAlert('Update Failed', err.message || 'Status update failed', 'error');
     } finally {
       setStatusLoading(null);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this property? This action cannot be undone.')) return;
+    const isConfirmed = await swalConfirm('Delete Property', 'Are you sure you want to delete this property? This action cannot be undone.');
+    if (!isConfirmed) return;
     setOpenMenu(null);
     try {
       await deleteProperty(id);
+      swalAlert('Deleted', 'Property removed successfully', 'success');
     } catch (err) {
-      console.error('Delete failed:', err);
+      swalAlert('Delete Failed', err.message || 'Could not delete property', 'error');
     }
   };
 
@@ -241,13 +244,12 @@ const Properties = () => {
         </button>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', gap: '1.5rem', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <div className="filter-search-container">
+        <div className="status-filter-group">
           {['All', 'Available', 'Under_Contract', 'Sold', 'Rented'].map(f => (
             <button
               key={f}
-              className={`btn ${filter === f.replace('_', ' ') ? 'btn-primary' : 'btn-outline'}`}
-              style={{ borderRadius: '9999px', fontSize: '0.75rem' }}
+              className={`btn filter-btn ${filter === f.replace('_', ' ') ? 'btn-primary' : 'btn-outline'}`}
               onClick={() => setFilter(f.replace('_', ' '))}
             >
               {f.replace('_', ' ')}

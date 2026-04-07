@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import './Layout.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
@@ -49,7 +49,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo">
             <Zap size={18} fill="currentColor" />
@@ -62,6 +62,7 @@ const Sidebar = () => {
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={() => window.innerWidth <= 768 && onClose()}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           >
             {({ isActive }) => (
