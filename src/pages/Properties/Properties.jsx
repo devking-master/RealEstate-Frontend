@@ -1,6 +1,7 @@
 import './Properties.css';
 import { useState, useRef, useEffect } from 'react';
 import { useData } from '../../hooks/useData';
+import { baseURL } from '../../api/client';
 import PropertyForm from './PropertyForm';
 import Modal from '../../components/UI/Modal';
 import {
@@ -163,7 +164,7 @@ const Properties = () => {
       {filtered.map((prop, i) => {
         const firstImage = prop.images?.[0] || prop.imageUrl;
         const cfg = STATUS_CONFIG[prop.status] || STATUS_CONFIG.available;
-        const fullImgUrl = firstImage ? (firstImage.startsWith('http') ? firstImage : `http://localhost:5000/${firstImage}`) : null;
+        const fullImgUrl = firstImage ? (firstImage.startsWith('http') ? firstImage : `${baseURL}/${firstImage}`) : null;
         
         return (
           <div

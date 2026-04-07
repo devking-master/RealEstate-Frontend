@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useData } from '../../hooks/useData';
 import { useUpload } from '../../hooks/useUpload';
+import { baseURL } from '../../api/client';
 import { ImagePlus, X, Loader2 } from 'lucide-react';
 
 const PropertyForm = ({ onClose, existingProperty }) => {
@@ -132,7 +133,7 @@ const PropertyForm = ({ onClose, existingProperty }) => {
     // Construct the full URL for the <img> tag
     const fullUrl = img.url.startsWith('http') 
       ? img.url 
-      : `http://localhost:5000/${img.url}`;
+      : `${baseURL}/${img.url}`;
     
     return (
       <div key={idx} className="image-preview-wrapper" style={{ 
