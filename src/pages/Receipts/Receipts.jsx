@@ -1,6 +1,7 @@
+import React from 'react';
 import { useState } from 'react';
 import { useData } from '../../hooks/useData';
-import { GooeyInput } from '../../components/ui/gooey-input';
+import { GooeyInput } from '../../components/ui/gooey-input.jsx'; // Added .jsx
 import {
   Receipt as ReceiptIcon,
   Download,

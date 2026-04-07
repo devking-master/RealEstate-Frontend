@@ -1,12 +1,13 @@
+import React from 'react';
 import { useState, useMemo } from 'react';
 import { useData } from '../../hooks/useData';
 import { privateApiClient } from '../../api/client';
 import TransactionForm from './TransactionForm';
 import PaymentForm from './PaymentForm';
-import Modal from '../../components/UI/Modal';
-import { HoverBorderGradient } from '../../components/ui/hover-border-gradient';
-import { GooeyInput } from '../../components/ui/gooey-input';
-import { LoadingSpinner } from '../../components/ui/loader';
+import Modal from '../../components/ui/Modal'; // Changed UI to ui
+import { HoverBorderGradient } from '../../components/ui/hover-border-gradient.jsx'; // Added .jsx
+import { GooeyInput } from '../../components/ui/gooey-input.jsx'; // Added .jsx
+import { LoadingSpinner } from '../../components/ui/loader.jsx'; // Added .jsx
 import {
   DollarSign,
   Plus,
