@@ -1,15 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react'; 
 import { useData } from '../../hooks/useData';
 import { 
   Building2, 
   Users, 
   TrendingUp, 
   CreditCard,
-  ChevronRight,
-  ArrowUpRight,
   Plus,
-  Zap,
-  Search
+  User 
 } from 'lucide-react';
 import PropertyForm from '../Properties/PropertyForm';
 import Modal from '../../components/UI/Modal';
@@ -24,21 +21,65 @@ import {
 } from 'recharts';
 
 const Dashboard = () => {
-  const { properties, clients, transactions, settings, stats, loading } = useData();
+  const { properties = [], clients = [], transactions = [], settings, stats, loading } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'NGN',
-    }).format(amount || 0).replace('NGN', settings.currency);
+    }).format(amount || 0).replace('NGN', settings?.currency || '₦');
   };
+
+  // Logic for Active Pipeline
+  const activePipelineCount = useMemo(() => {
+    return transactions.filter(t => 
+      t.status === 'pending' || t.status === 'partially_paid'
+    ).length;
+  }, [transactions]);
+
+  // Logic for Total Capital
+  const totalCapitalCalculated = useMemo(() => {
+    if (stats?.financials?.totalSalesRevenue) return stats.financials.totalSalesRevenue;
+    return transactions.reduce((acc, txn) => acc + (Number(txn.paidAmount) || 0), 0);
+  }, [stats, transactions]);
+
+  /** * PROPER CHART IMPLEMENTATION 
+   * 1. Maps all 12 months to ensure the X-Axis is always full.
+   * 2. Filters only the current year's data.
+   * 3. Sorts by date to ensure the line flows correctly.
+   */
+  const chartData = useMemo(() => {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const currentYear = new Date().getFullYear();
+    
+    // Create base data structure
+    const dataMap = monthNames.reduce((acc, month) => {
+      acc[month] = 0;
+      return acc;
+    }, {});
+
+    // Aggregate real transaction data
+    transactions.forEach(txn => {
+      const date = new Date(txn.createdAt);
+      if (date.getFullYear() === currentYear) {
+        const monthName = monthNames[date.getMonth()];
+        dataMap[monthName] += (Number(txn.paidAmount) || 0);
+      }
+    });
+
+    // Convert map back to array for Recharts
+    return monthNames.map(name => ({
+      name,
+      revenue: dataMap[name]
+    }));
+  }, [transactions]);
 
   const dashboardStats = [
     { label: 'Portfolio Assets', value: stats?.inventory?.total || properties.length, icon: Building2, color: '#3b82f6' },
     { label: 'Strategic Clients', value: clients.length, icon: Users, color: '#10b981' },
-    { label: 'Total Capital', value: formatCurrency(stats?.financials?.totalSalesRevenue || 0), icon: TrendingUp, color: '#8b5cf6' },
-    { label: 'Active Pipeline', value: transactions.filter(t => t.status === 'pending').length || 0, icon: CreditCard, color: '#f59e0b' },
+    { label: 'Total Capital', value: formatCurrency(totalCapitalCalculated), icon: TrendingUp, color: '#8b5cf6' },
+    { label: 'Active Pipeline', value: activePipelineCount, icon: CreditCard, color: '#f59e0b' },
   ];
 
   if (loading && !properties.length) {
@@ -81,7 +122,7 @@ const Dashboard = () => {
             </div>
             <div>
                 <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</p>
-                <p style={{ fontSize: '1.75rem', fontWeight: 900, marginTop: '0.25rem', letterSpacing: '-0.05em' }}>{stat.value}</p>
+                <p style={{ fontSize: '1.5rem', fontWeight: 900, marginTop: '0.25rem', letterSpacing: '-0.05em' }}>{stat.value}</p>
             </div>
           </div>
         ))}
@@ -95,35 +136,57 @@ const Dashboard = () => {
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Real-time growth tracking and fiscal forecasting.</p>
             </div>
           </div>
-          <div style={{ flex: 1, minHeight: '300px' }}>
+          <div style={{ flex: 1, minHeight: '320px' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={[
-                { name: 'Jan', revenue: 4000 },
-                { name: 'Feb', revenue: 3000 },
-                { name: 'Mar', revenue: 5000 },
-                { name: 'Apr', revenue: 2780 },
-                { name: 'May', revenue: 6890 },
-                { name: 'Jun', revenue: 8390 },
-                { name: 'Jul', revenue: 10490 },
-              ]} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--brand-accent)" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="var(--brand-accent)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-main)" />
-                <XAxis dataKey="name" fontSize={12} axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)'}} dy={10} />
-                <YAxis fontSize={12} axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)'}} />
-                <Tooltip 
-                    contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-main)', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', color: 'var(--text-main)' }}
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(226, 232, 240, 0.1)" />
+                <XAxis 
+                  dataKey="name" 
+                  fontSize={12} 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{fill: '#94a3b8'}} 
+                  dy={10} 
                 />
-                <Area type="monotone" dataKey="revenue" stroke="var(--brand-accent)" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" />
+                <YAxis 
+                  fontSize={12} 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{fill: '#94a3b8'}} 
+                  tickFormatter={(value) => `₦${value >= 1000 ? (value/1000) + 'k' : value}`}
+                />
+                <Tooltip 
+                    cursor={{ stroke: '#3b82f6', strokeWidth: 1 }}
+                    contentStyle={{ 
+                      background: '#0f172a', 
+                      border: '1px solid rgba(255,255,255,0.1)', 
+                      borderRadius: '12px', 
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)',
+                      color: '#fff' 
+                    }}
+                    formatter={(value) => [formatCurrency(value), 'Revenue']}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="revenue" 
+                  stroke="#3b82f6" 
+                  strokeWidth={3} 
+                  fillOpacity={1} 
+                  fill="url(#colorRev)" 
+                  animationDuration={1500}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
+        {/* Recent Ledger Section */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.125rem' }}>Recent Ledger</h3>
@@ -132,8 +195,8 @@ const Dashboard = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {transactions.slice(0, 6).map((txn, i) => (
                 <div key={i} className="animate-fade-in-up" style={{ animationDelay: `${0.4 + i * 0.05}s`, display: 'flex', gap: '1.25rem', alignItems: 'center', paddingBottom: '1.25rem', borderBottom: i === 5 ? 'none' : '1px solid var(--border-subtle)' }}>
-                    <div className="avatar" style={{ fontSize: '0.8125rem', width: '40px', height: '40px', borderRadius: '12px', background: 'var(--bg-hover)', color: 'var(--text-main)', border: '1px solid var(--border-main)' }}>
-                        {txn.client?.name?.charAt(0) || 'C'}
+                    <div className="avatar" style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#10b98115', color: '#10b981', border: '1px solid #10b98130', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <User size={20} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{ fontSize: '0.9375rem', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
