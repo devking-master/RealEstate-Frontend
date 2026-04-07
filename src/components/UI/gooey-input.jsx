@@ -13,7 +13,9 @@ export const GooeyInput = ({
 
   return (
     <div
-      className={`relative transition-transform duration-200 ${isFocused ? 'scale-105' : 'scale-100'} ${className}`}
+      className={`relative transition-transform duration-200 ${
+        isFocused ? "scale-105" : "scale-100"
+      } ${className}`}
     >
       <div className="relative">
         <input
@@ -29,7 +31,7 @@ export const GooeyInput = ({
 
         <div
           className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-200 ${
-            isFocused ? 'scale-110 text-blue-500' : 'scale-100 text-gray-500'
+            isFocused ? "scale-110 text-blue-500" : "scale-100 text-gray-500"
           }`}
         >
           <Icon size={18} />

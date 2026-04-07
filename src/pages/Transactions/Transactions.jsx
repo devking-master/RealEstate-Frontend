@@ -4,10 +4,10 @@ import { useData } from '../../hooks/useData';
 import { privateApiClient } from '../../api/client';
 import TransactionForm from './TransactionForm';
 import PaymentForm from './PaymentForm';
-import Modal from '../../components/ui/Modal'; // Changed UI to ui
-import { HoverBorderGradient } from '../../components/ui/hover-border-gradient.jsx'; // Added .jsx
-import { GooeyInput } from '../../components/ui/gooey-input.jsx'; // Added .jsx
-import { LoadingSpinner } from '../../components/ui/loader.jsx'; // Added .jsx
+import Modal from '../../components/UI/Modal.jsx'; // Changed UI to ui
+import { HoverBorderGradient } from '../../components/UI/hover-border-gradient.jsx'; // Added .jsx
+import { GooeyInput } from '../../components/UI/gooey-input.jsx'; // Added .jsx
+import { LoadingSpinner } from '../../components/UI/loader.jsx'; // Added .jsx
 import {
   DollarSign,
   Plus,
