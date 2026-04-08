@@ -6,8 +6,8 @@ import TransactionForm from './TransactionForm';
 import PaymentForm from './PaymentForm';
 import Modal from '../../components/UI/Modal.jsx'; // Changed UI to ui
 import { HoverBorderGradient } from '../../components/UI/hover-border-gradient.jsx'; // Added .jsx
-import { GooeyInput } from '../../components/UI/gooey-input.jsx'; // Added .jsx
 import { LoadingSpinner } from '../../components/UI/loader.jsx'; // Added .jsx
+import './Transactions.css';
 import { toast, alert as swalAlert } from '../../utils/swal';
 import {
   DollarSign,
@@ -18,7 +18,8 @@ import {
   FileText,
   CreditCard,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Search
 } from 'lucide-react';
 
 const Transactions = () => {
@@ -226,12 +227,16 @@ const handleGenerateInvoice = async (dbId) => {
                     </button>
                 ))}
             </div>
-            <GooeyInput
-              placeholder="Search by client, property or type..."
-              value={searchTerm}
-              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              className="min-w-80"
-            />
+            <div className="search-wrapper">
+              <Search className="search-icon" size={18} />
+              <input
+                type="text"
+                placeholder="Search by client, property or type..."
+                className="form-control search-input"
+                value={searchTerm}
+                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              />
+            </div>
         </div>
 
         {/* Transaction Grid */}

@@ -133,3 +133,258 @@
 .auth-footer a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 16px;
+  }
+
+  .auth-card {
+    padding: 36px;
+    border-radius: 16px;
+    max-width: 100%;
+  }
+
+  .auth-card .logo-container {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+
+  .auth-card p {
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+  }
+
+  .auth-card .form-group {
+    margin-bottom: 16px;
+  }
+
+  .auth-card label {
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+  }
+
+  .auth-card input {
+    padding: 9px 12px;
+    font-size: 0.875rem;
+  }
+
+  .auth-button {
+    padding: 10px;
+    font-size: 0.875rem;
+    margin-top: 10px;
+  }
+
+  .auth-error {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+    margin-bottom: 20px;
+  }
+
+  .auth-footer {
+    margin-top: 24px;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-container {
+    padding: 12px;
+  }
+
+  .auth-card {
+    padding: 28px;
+    border-radius: 12px;
+    width: calc(100% - 24px);
+    max-width: none;
+  }
+
+  .auth-card .logo-container {
+    width: 36px;
+    height: 36px;
+    font-size: 1.125rem;
+    margin-bottom: 18px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.125rem;
+    margin-bottom: 4px;
+  }
+
+  .auth-card p {
+    font-size: 0.8125rem;
+    margin-bottom: 20px;
+  }
+
+  .auth-card .form-group {
+    margin-bottom: 14px;
+  }
+
+  .auth-card label {
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+  }
+
+  .auth-card input {
+    padding: 8px 11px;
+    font-size: 0.8125rem;
+    border-radius: 6px;
+  }
+
+  .auth-button {
+    padding: 9px;
+    font-size: 0.8125rem;
+    margin-top: 8px;
+  }
+
+  .auth-error {
+    padding: 8px 10px;
+    font-size: 0.7rem;
+    margin-bottom: 18px;
+    gap: 6px;
+  }
+
+  .auth-footer {
+    margin-top: 20px;
+    font-size: 0.75rem;
+  }
+
+  .auth-footer a {
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 10px;
+    min-height: 100vh;
+  }
+
+  .auth-card {
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  }
+
+  .auth-card .logo-container {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    margin: 0 auto 16px;
+  }
+
+  .auth-card h2 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .auth-card p {
+    font-size: 0.75rem;
+    margin-bottom: 18px;
+  }
+
+  .auth-card .form-group {
+    margin-bottom: 12px;
+  }
+
+  .auth-card label {
+    font-size: 0.65rem;
+    margin-bottom: 4px;
+  }
+
+  .auth-card input {
+    padding: 7px 10px;
+    font-size: 0.75rem;
+  }
+
+  .auth-card input::placeholder {
+    font-size: 0.7rem;
+  }
+
+  .auth-button {
+    padding: 8px;
+    font-size: 0.75rem;
+    margin-top: 6px;
+    border-radius: 6px;
+  }
+
+  .auth-error {
+    padding: 6px 8px;
+    font-size: 0.65rem;
+    margin-bottom: 16px;
+    gap: 4px;
+  }
+
+  .auth-footer {
+    margin-top: 16px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-container {
+    padding: 8px;
+  }
+
+  .auth-card {
+    padding: 16px;
+    max-width: 280px;
+  }
+
+  .auth-card .logo-container {
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+    margin-bottom: 14px;
+  }
+
+  .auth-card h2 {
+    font-size: 0.9375rem;
+    margin-bottom: 3px;
+  }
+
+  .auth-card p {
+    font-size: 0.7rem;
+    margin-bottom: 16px;
+  }
+
+  .auth-card .form-group {
+    margin-bottom: 10px;
+  }
+
+  .auth-card label {
+    font-size: 0.6rem;
+    margin-bottom: 3px;
+  }
+
+  .auth-card input {
+    padding: 6px 8px;
+    font-size: 0.7rem;
+  }
+
+  .auth-button {
+    padding: 6px;
+    font-size: 0.65rem;
+    margin-top: 5px;
+  }
+
+  .auth-error {
+    padding: 5px 6px;
+    font-size: 0.6rem;
+    margin-bottom: 14px;
+  }
+
+  .auth-footer {
+    margin-top: 14px;
+    font-size: 0.65rem;
+  }
+}

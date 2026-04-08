@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useData } from '../../hooks/useData';
 import ClientForm from './ClientForm';
 import Modal from '../../components/UI/Modal';
+import './Clients.css';
 import { 
   Mail, 
   Phone, 

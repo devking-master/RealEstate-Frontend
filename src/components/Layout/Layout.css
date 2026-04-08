@@ -361,7 +361,7 @@
 
     .sidebar {
         transform: translateX(-100%);
-        width: 280px !important; /* Fixed width on mobile */
+        width: 280px !important;
         z-index: 1002;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: none;
@@ -383,7 +383,7 @@
 
     .main-wrapper {
         margin-left: 0;
-        padding-top: 60px; /* Space for mobile header */
+        padding-top: 60px;
     }
 
     .sidebar:hover {
@@ -394,5 +394,210 @@
 
     .sidebar:hover ~ .main-wrapper {
         filter: none;
+    }
+
+    .mobile-header {
+        padding: 0 1rem;
+    }
+
+    .sidebar-nav {
+        gap: 0.5rem;
+    }
+
+    .nav-item {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.875rem;
+    }
+
+    .nav-label {
+        font-size: 0.75rem;
+    }
+
+    .drop-up-menu {
+        width: 200px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mobile-header {
+        height: 56px;
+        padding: 0 0.875rem;
+    }
+
+    .sidebar {
+        width: 240px !important;
+    }
+
+    .sidebar.open {
+        width: 240px !important;
+    }
+
+    .sidebar-header {
+        height: 40px;
+        gap: 0.75rem;
+    }
+
+    .nav-item {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .nav-item-icon {
+        width: 18px;
+    }
+
+    .avatar.small {
+        width: 24px;
+        height: 24px;
+        font-size: 0.65rem;
+    }
+
+    .user-details {
+        gap: 2rem;
+    }
+
+    .drop-up-menu {
+        width: 180px;
+    }
+
+    .sidebar-nav {
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-header {
+        height: 52px;
+        padding: 0 0.75rem;
+    }
+
+    .mobile-logo-group {
+        gap: 0.5rem;
+    }
+
+    .menu-toggle {
+        padding: 6px;
+    }
+
+    .sidebar {
+        width: 220px !important;
+    }
+
+    .sidebar.open {
+        width: 220px !important;
+    }
+
+    .main-wrapper {
+        padding-top: 52px;
+    }
+
+    .sidebar-brand {
+        font-size: 0.875rem;
+    }
+
+    .nav-item {
+        padding: 0.4rem 0.625rem;
+        gap: 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .nav-label {
+        font-size: 0.65rem;
+        font-weight: 500;
+    }
+
+    .sidebar-footer {
+        gap: 0.125rem;
+    }
+
+    .sidebar-action {
+        padding: 0.4rem 0.625rem;
+        gap: 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .sidebar-profile-box {
+        padding: 0.25rem;
+    }
+
+    .avatar.small {
+        width: 22px;
+        height: 22px;
+        font-size: 0.6rem;
+    }
+
+    .user-details {
+        gap: 1.5rem;
+    }
+
+    .user-name {
+        font-size: 0.75rem;
+    }
+
+    .drop-up-user {
+        font-size: 0.6rem;
+    }
+
+    .drop-up-email {
+        font-size: 0.75rem;
+    }
+
+    .drop-up-item {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.75rem;
+    }
+
+    .profile-chevron {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 380px) {
+    .mobile-header {
+        height: 48px;
+        padding: 0 0.5rem;
+    }
+
+    .sidebar {
+        width: 200px !important;
+    }
+
+    .sidebar.open {
+        width: 200px !important;
+    }
+
+    .main-wrapper {
+        padding-top: 48px;
+    }
+
+    .sidebar-header {
+        margin-bottom: 1rem;
+    }
+
+    .nav-item {
+        padding: 0.35rem 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .nav-label {
+        font-size: 0.6rem;
+    }
+
+    .nav-item-icon {
+        width: 16px;
+    }
+
+    .avatar.small {
+        width: 20px;
+        height: 20px;
+        font-size: 0.55rem;
+    }
+
+    .user-details {
+        gap: 1rem;
+    }
+
+    .drop-up-menu {
+        width: 160px;
     }
 }

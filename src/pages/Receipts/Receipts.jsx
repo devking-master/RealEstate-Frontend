@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 import { useData } from '../../hooks/useData';
-import { GooeyInput } from '../../components/UI/gooey-input'; // Added .jsx
+import './Receipts.css';
 import {
   Receipt as ReceiptIcon,
   Download,
+  Search
 } from 'lucide-react';
 
 const Receipts = () => {
@@ -59,8 +60,11 @@ const Receipts = () => {
       <div className="card">
         <div className="card-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid var(--border-main)', background: 'var(--bg-hover)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="search-wrapper" style={{ maxWidth: '400px' }}>
-                <GooeyInput
+                <Search className="search-icon" size={18} />
+                <input
+                  type="text"
                   placeholder="Search receipts by client, property, or ID..."
+                  className="form-control search-input"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useData } from '../../hooks/useData';
 import { Download, RefreshCw, FileText } from 'lucide-react';
-import { privateApiClient } from '../../api/client'; 
+import { privateApiClient } from '../../api/client';
+import './Invoices.css'; 
 
 const Invoices = () => {
   const { invoices, settings, loading, refreshData } = useData();
