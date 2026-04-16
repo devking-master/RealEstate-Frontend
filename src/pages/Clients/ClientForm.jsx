@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useData } from '../../hooks/useData';
+import { toast } from '../../utils/swal';
 
 const ClientForm = ({ onClose }) => {
   const { addClient } = useData();
@@ -15,10 +16,16 @@ const ClientForm = ({ onClose }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addClient(formData);
-    onClose();
+    try {
+      await addClient(formData);
+      toast('🎉 Client Onboarded Successfully!', 'success');
+      onClose();
+    } catch (err) {
+      toast('Failed to add client. Please try again.', 'error');
+      console.error('Client creation failed:', err);
+    }
   };
 
   return (

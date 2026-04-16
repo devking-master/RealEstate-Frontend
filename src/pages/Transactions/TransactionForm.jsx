@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useData } from '../../hooks/useData';
-import { alert as swalAlert } from '../../utils/swal';
+import { alert as swalAlert, toast } from '../../utils/swal';
 
 const TransactionForm = ({ onClose }) => {
   const { properties = [], clients = [], addTransaction, loading } = useData();
@@ -56,6 +56,7 @@ const TransactionForm = ({ onClose }) => {
         paidAmount: Number(formData.paidAmount) || 0,
         transactionId: `TXN-${Date.now().toString().slice(-6)}`
       });
+      toast('💰 Transaction Created Successfully!', 'success');
       onClose();
     } catch (err) {
       swalAlert("Operation Failed", err.message, "error");

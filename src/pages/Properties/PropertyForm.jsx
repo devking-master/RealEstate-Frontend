@@ -3,6 +3,7 @@ import { useData } from '../../hooks/useData';
 import { useUpload } from '../../hooks/useUpload';
 import { baseURL } from '../../api/client';
 import { ImagePlus, X, Loader2 } from 'lucide-react';
+import { toast } from '../../utils/swal';
 
 const PropertyForm = ({ onClose, existingProperty }) => {
   const { addProperty, updateProperty } = useData();
@@ -87,11 +88,14 @@ const PropertyForm = ({ onClose, existingProperty }) => {
 
       if (isEditing) {
         await updateProperty(existingProperty._id, payload);
+        toast('✏️ Property Updated Successfully!', 'success');
       } else {
         await addProperty(payload);
+        toast('🏠 Property Added Successfully!', 'success');
       }
       onClose();
     } catch (err) {
+      toast('Failed to save property. Please try again.', 'error');
       console.error('Save failed:', err);
     } finally {
       setSubmitting(false);
