@@ -46,11 +46,10 @@ const PropertyForm = ({ onClose, existingProperty }) => {
 
   for (const file of files) {
     try {
-      const filePath = await uploadFile(file); // This now returns "uploads/filename.jpg"
+      const filePath = await uploadFile(file); // This returns the Cloudinary secure URL
       
       if (filePath) {
-        // We add it to our list. 
-        // The URL is just the path from the server
+        // Add the Cloudinary URL to our list
         setImages(prev => [...prev, { url: filePath, isExisting: false }]);
       }
     } catch (err) {
