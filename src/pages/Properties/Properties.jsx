@@ -167,7 +167,11 @@ const Properties = () => {
       {filtered.map((prop, i) => {
         const firstImage = prop.images?.[0] || prop.imageUrl;
         const cfg = STATUS_CONFIG[prop.status] || STATUS_CONFIG.available;
-        const fullImgUrl = firstImage ? (firstImage.startsWith('http') ? firstImage : `${baseURL}/${firstImage}`) : null;
+        const fullImgUrl = firstImage ? (
+          firstImage.startsWith('http') || firstImage.startsWith('data:') 
+            ? firstImage 
+            : `${baseURL}/${firstImage}`
+        ) : null;
         
         return (
           <div

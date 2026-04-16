@@ -131,7 +131,7 @@ const PropertyForm = ({ onClose, existingProperty }) => {
     if (!img?.url) return null;
     
     // Construct the full URL for the <img> tag
-    const fullUrl = img.url.startsWith('http') 
+    const fullUrl = (img.url.startsWith('http') || img.url.startsWith('data:'))
       ? img.url 
       : `${baseURL}/${img.url}`;
     
