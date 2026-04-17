@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useData } from '../../hooks/useData';
+import { toast } from '../../utils/swal';
 
 const PaymentForm = ({ transactionId, onClose }) => {
   const { makeInvoicePayment, transactions = [], invoices = [] } = useData();
@@ -47,6 +48,7 @@ const PaymentForm = ({ transactionId, onClose }) => {
       };
 
       await makeInvoicePayment(linkedInvoice._id, paymentData);
+      toast('✅ Payment Recorded Successfully!', 'success');
       onClose(); 
     } catch (err) {
       setError(err.response?.data?.error || err.message);

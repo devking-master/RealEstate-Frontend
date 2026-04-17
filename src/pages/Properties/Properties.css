@@ -300,15 +300,13 @@
     display: flex;
     gap: 0.5rem;
     overflow-x: auto;
-    padding-bottom: 8px; /* Space for scrollbar if it appears */
+    padding-bottom: 8px; 
     max-width: 100%;
-    scrollbar-width: none; /* Hide scrollbar for cleaner look */
+    scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
-.status-filter-group::-webkit-scrollbar {
-    display: none;
-}
+
 
 .filter-btn {
     border-radius: 9999px !important;
