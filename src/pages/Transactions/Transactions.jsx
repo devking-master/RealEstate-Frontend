@@ -5,7 +5,6 @@ import { privateApiClient } from '../../api/client';
 import TransactionForm from './TransactionForm';
 import PaymentForm from './PaymentForm';
 import Modal from '../../components/UI/Modal.jsx'; // Changed UI to ui
-import { HoverBorderGradient } from '../../components/UI/hover-border-gradient.jsx'; // Added .jsx
 import { LoadingSpinner } from '../../components/UI/loader.jsx'; // Added .jsx
 import './Transactions.css';
 import { toast, alert as swalAlert } from '../../utils/swal';
@@ -182,9 +181,9 @@ const handleGenerateInvoice = async (dbId) => {
           <p className="page-subtitle">Central management of deals and financial flows.</p>
         </div>
         <div className="flex gap-3">
-            <HoverBorderGradient onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
-              <Plus size={16} /> New Transaction
-            </HoverBorderGradient>
+          <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+            <Plus size={16} /> New Transaction
+          </button>
         </div>
       </div>
 
@@ -265,20 +264,21 @@ const handleGenerateInvoice = async (dbId) => {
                         {txn.status.replace('_', ' ').toUpperCase()}
                       </span>
                     </div>
-                    <div className="flex gap-2 mt-4">
+                    <div className="txn-card-actions">
                       {hasInvoice ? (
-                        <button onClick={() => window.location.href = '/invoices'} className="btn btn-sm btn-outline flex-1 gap-2">
+                        <button onClick={() => window.location.href = '/invoices'} className="btn btn-sm btn-outline">
                           <FileText size={14} /> View Invoice
                         </button>
                       ) : (
-                        <button onClick={() => handleGenerateInvoice(dbId)} className="btn btn-sm btn-primary flex-1 gap-2">
+                        <button onClick={() => handleGenerateInvoice(dbId)} className="btn btn-sm btn-primary">
                           <FileText size={14} /> Generate Invoice
                         </button>
                       )}
                       <button 
                         onClick={() => handleRecordPayment(dbId)} 
-                        className={`btn btn-sm flex-1 gap-2 ${txn.status === 'completed' ? 'btn-disabled opacity-50' : 'btn-primary'}`}
+                        className={`btn btn-sm ${txn.status === 'completed' ? 'btn-outline' : 'btn-primary'}`}
                         disabled={txn.status === 'completed'}
+                        style={txn.status === 'completed' ? { opacity: 0.45, cursor: 'not-allowed' } : {}}
                       >
                         <CreditCard size={14} /> Payment
                       </button>
